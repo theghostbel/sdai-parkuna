@@ -1,0 +1,51 @@
+<html>
+<head>
+<title>Сдай паркуна</title>
+
+<script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAuZgTg64Aw3bm-v1BXVZYi2QRtD9wdEkw",
+    authDomain: "sdai-parkuna.firebaseapp.com",
+    databaseURL: "https://sdai-parkuna.firebaseio.com",
+    storageBucket: "sdai-parkuna.appspot.com",
+    messagingSenderId: "967884969000"
+  };
+  firebase.initializeApp(config);
+</script>
+
+<script>
+  //File upload script to Firebase storage
+  var uploader = document.getElementById('uploader');
+  var fileButton = document.getElementById('fileUpload');
+
+  //File selection listener
+  fileButton.addEventListener('change', function(a) {
+    //Get image
+    var file = a.target.files[0];
+    //create a storage reference
+    var storageRef = firebase.storage().ref('images/' + file.name);
+
+    //store the image
+    var task = storageRef.put(file);
+
+    //notify the user of upload status
+    task.on('state_changed',
+        function progress(snapshot) {
+          var percentage = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
+          uploader.value = percentage;
+        },
+
+        function error(err) { console.error(err) },
+        function complete() { console.log('Complete') }
+    )
+  })
+</script>
+</head>
+<body>
+  <h4>Фото</h4>
+  <input type="file" value="upload" id="fileUpload"/>
+  <progress value="0" max="100" id="uploader">0%</progress>
+</body>
+</html>
