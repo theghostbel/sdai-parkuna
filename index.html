@@ -28,7 +28,7 @@
 
   //File selection listener
   fileButton.addEventListener('change', function(a) {
-    progresses.innerHTML('')
+    progresses.innerHTML = ''
     //Get image        
     for (var i = 0; i < a.target.files.length; i++) {
       const file = a.target.files.item(i)
