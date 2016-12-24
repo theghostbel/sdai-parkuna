@@ -43,7 +43,8 @@
       //store the image
       var task = storageRef.put(file);
       //notify the user of upload status
-      task.on('state_changed',
+      (function(progressEl){
+        task.on('state_changed',
         function progress(snapshot) {
           var percentage = (snapshot.bytesTransferred/snapshot.totalBytes) * 100
           progressEl.value = parseInt(percentage)
@@ -53,6 +54,7 @@
           console.log('Completed ', file.name)
           progressEl.classList.add('done')
         })
+      })(progressEl)      
     }
   })
 </script>
