@@ -30,7 +30,7 @@
   fileButton.addEventListener('change', function(a) {
     //Get image        
     for (var i = 0; i < a.target.files.length; i++) {
-      const file = files.item(i)
+      const file = a.target.files.item(i)
       var storageRef = firebase.storage().ref('images/' + file.name);
       
       var progress = document.createElement("progress")
