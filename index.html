@@ -34,11 +34,11 @@
       const file = a.target.files.item(i)
       var storageRef = firebase.storage().ref('images/' + file.name);
       
-      var progress = document.createElement("progress")
-      progress.value = 0
-  	  progress.max = 100
+      var progressEl = document.createElement("progress")
+      progressEl.value = 0
+  	  progressEl.max = 100
             
-      progresses.appendChild(progress)
+      progresses.appendChild(progressEl)
       
       //store the image
       var task = storageRef.put(file);
@@ -46,14 +46,12 @@
       task.on('state_changed',
         function progress(snapshot) {
           var percentage = (snapshot.bytesTransferred/snapshot.totalBytes) * 100
-          
-          console.log('progress', progress, parseInt(percentage))
-          progress.value = parseInt(percentage)
+          progressEl.value = parseInt(percentage)
         },
         function error(err) { console.error(err) },
         function complete() {
           console.log('Completed ', file.name)
-          progress.classList.add('done')
+          progressEl.classList.add('done')
         })
     }
   })
