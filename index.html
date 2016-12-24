@@ -23,11 +23,12 @@
 
 <script>
   //File upload script to Firebase storage
-  var uploader = document.getElementById('uploader');
+  var progresses = document.querySelector(".progresses")
   var fileButton = document.getElementById('fileUpload');
 
   //File selection listener
   fileButton.addEventListener('change', function(a) {
+    progresses.innerHTML('')
     //Get image        
     for (var i = 0; i < a.target.files.length; i++) {
       const file = a.target.files.item(i)
@@ -36,9 +37,8 @@
       var progress = document.createElement("progress")
       progress.value = 0
   	  progress.max = 100
-      
-      document.querySelector(".progresses")
-      	.appendChild(progress)
+            
+      progresses.appendChild(progress)
       
       //store the image
       var task = storageRef.put(file);
@@ -51,7 +51,7 @@
         function error(err) { console.error(err) },
         function complete() {
           console.log('Completed ', file.name)
-          progress.classList.push('done')
+          progress.classList.add('done')
         })
     }
   })
