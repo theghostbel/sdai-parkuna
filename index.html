@@ -4,10 +4,10 @@
 </head>
 <body>
   <h4>Фото</h4>
-  <input type="file" value="upload" id="fileUpload"/>
-  <progress value="0" max="100" id="uploader">0%</progress>
-  
-  
+  <input type="file" value="upload" id="fileUpload" multiple="multiple"/>
+  <div class="progresses">
+  </div>  
+    
   <script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
 <script>
   // Initialize Firebase
@@ -28,24 +28,31 @@
 
   //File selection listener
   fileButton.addEventListener('change', function(a) {
-    //Get image
-    var file = a.target.files[0];
-    //create a storage reference
-    var storageRef = firebase.storage().ref('images/' + file.name);
-
-    //store the image
-    var task = storageRef.put(file);
-
-    //notify the user of upload status
-    task.on('state_changed',
+    //Get image    
+    a.target.files.forEach(file => {
+      var storageRef = firebase.storage().ref('images/' + file.name);
+      
+      var progress = document.createElement("progress")
+      progress.value = 0
+  	  progress.max = 100
+      
+      document.queryElementSelector("progresses")
+      	.appendChild(progress)
+      
+      //store the image
+      var task = storageRef.put(file);
+      //notify the user of upload status
+      task.on('state_changed',
         function progress(snapshot) {
-          var percentage = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
-          uploader.value = percentage;
+          var percentage = (snapshot.bytesTransferred/snapshot.totalBytes) * 100
+          progress.value = percentage
         },
-
         function error(err) { console.error(err) },
-        function complete() { console.log('Complete') }
-    )
+        function complete() {
+          console.log('Completed ', file.name)
+          progress.classList.push('done')
+        })
+    })
   })
 </script>
 </body>
